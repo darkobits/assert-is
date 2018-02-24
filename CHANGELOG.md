@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* Remove third parameter from assertAny. ([2776522](https://github.com/darkobits/assert-is/commit/2776522))
-* Throw RangeErrors on inRange checks. ([263efef](https://github.com/darkobits/assert-is/commit/263efef))
+* Remove third parameter from `assertAny`. ([2776522](https://github.com/darkobits/assert-is/commit/2776522))
+* Throw a `RangeError` on `inRange` checks. ([263efef](https://github.com/darkobits/assert-is/commit/263efef))
 
 
 
