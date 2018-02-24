@@ -14,9 +14,9 @@ import {__, curry, partial} from 'ramda';
  * @param  {string} message - Error message to use if the assertion fails.
  * @return {any} - Returns 'value' if assertion passes.
  */
-function assertOrThrow({method, qualifier, value, message}) {
+function assertOrThrow({method, qualifier, value, ErrorCtor, message}) {
   if (!is[method](value, qualifier)) {
-    throw new TypeError(message);
+    throw new ErrorCtor(message);
   }
 
   return value;
@@ -42,6 +42,7 @@ function getHandler(method) {
         method: 'directInstanceOf',
         qualifier: expectedClass,
         value,
+        ErrorCtor: TypeError,
         message: `Expected value to be a direct instance of "${expectedClass.name}", got "${is(value)}".`
       });
     },
@@ -57,6 +58,7 @@ function getHandler(method) {
           method: 'inRange',
           qualifier: rangeOrUpperBound,
           value,
+          ErrorCtor: RangeError,
           message: `Expected value ${value} to be between ${low} and ${high}.`
         });
       }
@@ -65,22 +67,26 @@ function getHandler(method) {
         method: 'inRange',
         qualifier: rangeOrUpperBound,
         value,
+        ErrorCtor: RangeError,
         message: `Expected value ${value} to be less than or equal to ${rangeOrUpperBound}.`
       });
     },
     truthy: value => assertOrThrow({
       method: 'truthy',
       value,
+      ErrorCtor: TypeError,
       message: `Expected value to be truthy, got "${value}".`
     }),
     falsy: value => assertOrThrow({
       method: 'falsy',
       value,
+      ErrorCtor: TypeError,
       message: `Expected value to be falsy, got "${is(value)}".`
     }),
     default: value => assertOrThrow({
       method,
       value,
+      ErrorCtor: TypeError,
       message: `Expected value to be of type "${method}", got "${is(value)}".`
     })
   };

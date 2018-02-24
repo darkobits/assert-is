@@ -27,6 +27,9 @@ describe('#assertIs', () => {
     expect(() => assertIs('inRange', [10, 20])(50))
       .toThrow(/Expected value 50 to be between 10 and 20./);
 
+    expect(() => assertIs('inRange', [10, 20])(50))
+      .toThrow(RangeError);
+
     expect(() => assertIs('plainObject', () => {}))
       .toThrow(/Expected value to be of type "plainObject", got "Function"./);
 
