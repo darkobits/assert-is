@@ -1,13 +1,17 @@
 {
-  "name": "@darkobits/node-boilerplate",
-  "private": true,
-  "version": "1.0.0",
-  "description": "Boilerplate for Node projects.",
+  "name": "@darkobits/assert-is",
+  "version": "0.1.0",
+  "description": "Type assertions based on @sindresorhus/is.",
   "license": "WTFPL",
   "author": "darkobits",
   "main": "dist/index.js",
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "assert",
+    "assertion",
+    "types"
   ],
   "scripts": {
     "lint": "xo",
@@ -40,5 +44,9 @@
     "rules": {
       "no-multiple-empty-lines": "off"
     }
+  },
+  "dependencies": {
+    "@sindresorhus/is": "^0.7.0",
+    "ramda": "^0.25.0"
   }
 }
