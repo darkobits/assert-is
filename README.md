@@ -45,11 +45,8 @@ const add = (a, b) => assertIs('number', a) + assertIs('number', b);
 ```js
 import assertIs, {assertAny} from '@darkobits/assert-is';
 
-// Easily create reusable assertions for specific types:
-const assertIsString = assertIs('string');
-
 function greet (name, age) {
-  assertIsString(name);
+  assertIs('string', name);
   assertAny(['string', 'number'], age);
 
   return `Hello! My name is ${name}, and I am ${age} years old.`;
@@ -60,6 +57,29 @@ greet('Bob', 36) //=> 'Hello! My name is Bob, and I am 36 years old.'
 greet('Alice', 'forty-three') //=> 'Hello! My name is Alice, and I am forty-three years old.'
 
 greet('Leeroy', NaN) //=> TypeError('Expected value to be one of "string" or "number", got "nan".')
+```
+
+## Currying
+
+`assertIs` and `assertAny` can be curried to create reusable predicates:
+
+```js
+import assertIs, {assertAny} from '@darkobits/assert-is';
+
+const assertIsString = assertIs('string');
+assertIsString({}) //=> TypeError('Expected value to be of type "string", got "object".')
+
+const assertIsLessThanFive = assertIs('inRange', 5);
+const assertIsLessThanFive(10) //=> RangeError('Expected value 10 to be less than 5.')
+
+class Person { }
+const assertIsPerson = assertIs('directInstanceOf', Person);
+assertIsPerson(new Person()) //=> Person
+assertIsPerson({}) //=> TypeError('Expected value to be a direct instance of "Person", got "object".')
+
+const assertIsIterable = assertAny(['array', 'map', 'set', 'weakMap', 'weakSet']);
+assertIsIterable([1, 2, 3]) //=> [1, 2, 3]
+assertIsIterable(function () {}) //=> TypeError('Expected value to be one of "array" or "map" or "weakMap" or "weakSet", got "function".')
 ```
 
 ## &nbsp;
