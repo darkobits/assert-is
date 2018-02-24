@@ -1,4 +1,4 @@
-# assert-is
+![assert-is](https://user-images.githubusercontent.com/441546/36626587-3f935e6e-18ea-11e8-91f8-6bc1576f3e1c.png)
 
 [![][npm-img]][npm-url] [![][travis-img]][travis-url] [![][david-img]][david-url] [![][codacy-img]][codacy-url] [![][cc-img]][cc-url] [![][xo-img]][xo-url]
 
