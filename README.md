@@ -1,6 +1,6 @@
 # assert-is
 
-[![][npm-img]][npm-url] [![][david-img]][david-url] [![][cc-img]][cc-url] [![][xo-img]][xo-url]
+[![][npm-img]][npm-url] [![][travis-img]][travis-url] [![][david-img]][david-url] [![][codacy-img]][codacy-url] [![][cc-img]][cc-url] [![][xo-img]][xo-url]
 
 A light wrapper around the amazing [**is**](https://github.com/sindresorhus/is) type-checking library by [Sindre Sorhus](https://github.com/sindresorhus) designed to throw nice error messages when assertions fail. You should familiarize yourself with **is** before using this library.
 
@@ -71,8 +71,14 @@ greet('Leeroy', NaN) //=> TypeError('Expected value to be one of "string" or "nu
 [npm-img]: https://img.shields.io/npm/v/@darkobits/assert-is.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/@darkobits/assert-is
 
+[travis-img]: https://img.shields.io/travis/darkobits/assert-is.svg?style=flat-square
+[travis-url]: https://travis-ci.org/darkobits/assert-is
+
 [david-img]: https://img.shields.io/david/darkobits/assert-is.svg?style=flat-square
 [david-url]: https://david-dm.org/darkobits/assert-is
+
+[codacy-img]: https://img.shields.io/codacy/coverage/0023b07bb2454f2a8c336f92814f09a0.svg?style=flat-square
+[codacy-url]: https://www.codacy.com/app/darkobits/private-data
 
 [cc-img]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square
 [cc-url]: https://github.com/conventional-changelog/standard-version
