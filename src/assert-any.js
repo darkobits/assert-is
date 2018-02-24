@@ -4,16 +4,14 @@ import assertIs from './assert-is';
 
 
 /**
- * Accepts a list of methods on "is", a value, or a qualifier and a value.
- * If the value fails all of the assertions, an error is thrown. Otherwise,
- * the value is returned.
+ * Accepts a list of methods on "is" and a value. If the value fails all
+ * assertions, an error is thrown. Otherwise, the value is returned.
  *
  * @param  {array} - List of "is" methods to use as predicates.
- * @param  {any} a - Value or qualifier.
- * @param  {any} b - Value, if 'a' is a qualifier.
+ * @param  {any} a - Value to check.
  * @return {any} - Value, if any assertions passed.
  */
-export default function assertAny(methods, a, b) {
+export default function assertAny(methods, a) {
   assertIs('array', methods);
 
   const unsuppoertedMethods = intersection(['inRange', 'directInstanceOf'], methods);
@@ -27,12 +25,12 @@ export default function assertAny(methods, a, b) {
   }
 
   if (methods.length === 1) {
-    return assertIs(methods[0], a, b);
+    return assertIs(methods[0], a);
   }
 
   const anyPass = methods.reduce((acc, method) => {
     try {
-      assertIs(method, a, b);
+      assertIs(method, a);
       return acc || true;
     } catch (err) {
       return acc || false;
@@ -43,5 +41,5 @@ export default function assertAny(methods, a, b) {
     throw new TypeError(`Expected value to be any of "${methods.join('" or "')}", got "${is(a)}".`);
   }
 
-  return Array.from(arguments).length === 2 ? a : b;
+  return a;
 }
