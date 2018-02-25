@@ -50,7 +50,8 @@
     ],
     "space": true,
     "rules": {
-      "no-multiple-empty-lines": "off"
+      "no-multiple-empty-lines": "off",
+      "import/no-unresolved": "off"
     }
   }
 }

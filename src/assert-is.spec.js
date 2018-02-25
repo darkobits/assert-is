@@ -1,7 +1,7 @@
 import assertIs from './assert-is';
 
 
-describe('#assertIs', () => {
+describe('basic functionality', () => {
   it('should throw an error if the provided method does not exist', () => {
     expect(() => {
       assertIs('fleeb', 17);
@@ -73,48 +73,74 @@ describe('#assertIs', () => {
 
     expect(assertIs('falsy', null)).toBe(null);
   });
+});
 
-  describe('union types', () => {
-    it('should throw an error if the provided value does not satisfy the predicate', () => {
-      expect(() => assertIs(['truthy', 'string'], null))
-        .toThrow(/Expected value to be any of "truthy" or "string", got "null"./);
 
-      expect(() => assertIs(['symbol', 'function'])('foo'))
-        .toThrow(/Expected value to be any of "Symbol" or "Function", got "string"./);
+describe('union types', () => {
+  it('should throw an error if the provided value does not satisfy the predicate', () => {
+    expect(() => assertIs(['truthy', 'string'], null))
+      .toThrow(/Expected value to be any of "truthy" or "string", got "null"./);
 
-      expect(() => assertIs(['regExp', 'date'], []))
-        .toThrow(/Expected value to be any of "RegExp" or "Date", got "Array"./);
+    expect(() => assertIs(['symbol', 'function'])('foo'))
+      .toThrow(/Expected value to be any of "Symbol" or "Function", got "string"./);
 
-      expect(() => assertIs(['number', 'nan'], 'three'))
-        .toThrow(/Expected value to be any of "number" or "NaN", got "string"./);
+    expect(() => assertIs(['regExp', 'date'], []))
+      .toThrow(/Expected value to be any of "RegExp" or "Date", got "Array"./);
 
-      expect(() => assertIs(['integer', 'falsy'])(3.14))
-        .toThrow(/Expected value to be any of "integer" or "falsy", got "number"./);
+    expect(() => assertIs(['number', 'nan'], 'three'))
+      .toThrow(/Expected value to be any of "number" or "NaN", got "string"./);
 
-      expect(() => assertIs(['null', 'undefined'], false))
-        .toThrow(/Expected value to be any of "null" or "undefined", got "boolean"./);
+    expect(() => assertIs(['integer', 'falsy'])(3.14))
+      .toThrow(/Expected value to be any of "integer" or "falsy", got "number"./);
 
-      expect(() => assertIs(['plainObject', 'array'], new Set()))
-        .toThrow(/Expected value to be any of "plain object" or "array", got "Set"./);
+    expect(() => assertIs(['null', 'undefined'], false))
+      .toThrow(/Expected value to be any of "null" or "undefined", got "boolean"./);
 
-      expect(() => assertIs(['truthy', 'function'], undefined))
-        .toThrow(/Expected value to be any of "truthy" or "Function", got "undefined"./);
+    expect(() => assertIs(['plainObject', 'array'], new Set()))
+      .toThrow(/Expected value to be any of "plain object" or "array", got "Set"./);
 
-      expect(() => assertIs(['directInstanceOf', 'plainObject'], Error, {}))
-        .toThrow(/Assertions using "directInstanceOf" are not supported./);
+    expect(() => assertIs(['truthy', 'function'], undefined))
+      .toThrow(/Expected value to be any of "truthy" or "Function", got "undefined"./);
 
-      expect(() => assertIs(['inRange', 'plainObject'], [10, 20], 5))
-        .toThrow(/Assertions using "inRange" are not supported./);
+    expect(() => assertIs(['directInstanceOf', 'plainObject'], Error, {}))
+      .toThrow(/Assertions using "directInstanceOf" are not supported./);
+
+    expect(() => assertIs(['inRange', 'plainObject'], [10, 20], 5))
+      .toThrow(/Assertions using "inRange" are not supported./);
+  });
+
+  it('should return the provided value if it satisfied the predicate', () => {
+    expect(assertIs(['number', 'string'], 'four')).toBe('four');
+
+    expect(assertIs(['plainObject', 'function'], {})).toEqual({});
+
+    expect(assertIs(['truthy'])(42)).toBe(42);
+
+    expect(assertIs(['falsy', 'undefined'], 0)).toBe(0);
+  });
+});
+
+
+describe('custom predicates', () => {
+  class Parent { }
+
+  class Child extends Parent { }
+
+  class Orphan { }
+
+  describe('subclassOf', () => {
+    it('should throw an error if the two classes are not related', () => {
+      expect(() => assertIs('subclassOf', Parent)(Child)).not.toThrow();
+      expect(() => assertIs('subclassOf', Parent, Orphan))
+        .toThrow('Expected value to be a subclass of "Parent".');
     });
+  });
 
-    it('should return the provided value if it satisfied the predicate', () => {
-      expect(assertIs(['number', 'string'], 'four')).toBe('four');
-
-      expect(assertIs(['plainObject', 'function'], {})).toEqual({});
-
-      expect(assertIs(['truthy'])(42)).toBe(42);
-
-      expect(assertIs(['falsy', 'undefined'], 0)).toBe(0);
+  describe('instanceOf', () => {
+    it('should throw an error if the two classes are not related', () => {
+      expect(() => assertIs('instanceOf', Parent, new Child())).not.toThrow();
+      expect(() => assertIs('instanceOf')(Parent)(new Orphan()))
+        .toThrow('Expected value to be an instance of "Parent".');
     });
   });
 });
