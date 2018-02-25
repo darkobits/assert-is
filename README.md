@@ -100,7 +100,7 @@ assertIsIterable(function () {}) //=> TypeError('Expected value to be one of "ar
 [codacy-img]: https://img.shields.io/codacy/coverage/0023b07bb2454f2a8c336f92814f09a0.svg?style=flat-square
 [codacy-url]: https://www.codacy.com/app/darkobits/private-data
 
-[cc-img]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square
+[cc-img]: https://img.shields.io/badge/conventional%20commits-1.0.0-027dc6.svg?style=flat-square
 [cc-url]: https://github.com/conventional-changelog/standard-version
 
 [xo-img]: https://img.shields.io/badge/code_style-XO-e271a5.svg?style=flat-square

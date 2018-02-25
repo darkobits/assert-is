@@ -14,5 +14,14 @@
       "cwd": "babelrc",
       "root": ["./src"]
     }]
-  ]
+  ],
+  "comments": false,
+  "env": {
+    "development": {
+      "ignore": "spec"
+    },
+    "test": {
+      "sourceMaps": "inline"
+    }
+  }
 }
