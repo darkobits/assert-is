@@ -3,10 +3,10 @@ import assert from './context';
 describe('contexts', () => {
   function greet(salutation, title, first, last) {
     assert('Person::greet')
-      .arg('salutation').is('string', salutation)
-      .arg('title').is(['string', 'nullOrUndefined'], title)
-      .arg('first name').is('string', first)
-      .label('last name').is('string', last);
+      .arg('salutation', salutation).is('string')
+      .arg('title', title).is(['string', 'nullOrUndefined'])
+      .arg('first name', first).is('string')
+      .label('last name', last).is('string');
 
     return `${salutation}, ${title ? `${title} ` : ''}${first} ${last}!`;
   }

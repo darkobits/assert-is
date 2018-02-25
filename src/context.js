@@ -20,10 +20,10 @@ export default function Context(context) {
    *
    * @param {string} label
    */
-  ContextualAssert.label = label => {
+  ContextualAssert.label = (label, ...args) => {
     return {
-      is(...args) {
-        Reflect.apply(assertIs, {context, label}, args);
+      is(methodOrMethods) {
+        Reflect.apply(assertIs, {context, label}, [methodOrMethods, ...args]);
         return ContextualAssert;
       }
     };

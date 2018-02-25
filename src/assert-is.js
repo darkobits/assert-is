@@ -1,5 +1,5 @@
-import is from '@sindresorhus/is';
 import {head, find, keys, intersection, is as isInstanceOf, path, partial, prop, values} from 'ramda';
+import is from 'lib/is';
 
 
 /**
@@ -119,6 +119,24 @@ class AssertionHandler {
     return (this[method] || this.default(method)).bind(this);
   }
 
+  instanceOf(expectedClass, value) {
+    // If we were not provided a value, return a partially-applied version of
+    // assertIs that accepts a value.
+    if (arguments.length === 1) {
+      return partial(assertIs, ['instanceOf', expectedClass]);
+    }
+
+    if (is.instanceOf(value, expectedClass)) {
+      return new PassedAssertion(value);
+    }
+
+    return new FailedAssertion(
+      value,
+      TypeError,
+      `Expected ${LABEL_PLACEHOLDER} to be an instance of "${expectedClass.name}".`
+    );
+  }
+
   directInstanceOf(expectedClass, value) {
     // If we were not provided a value, return a partially-applied version of
     // assertIs that accepts a value.
@@ -138,6 +156,24 @@ class AssertionHandler {
       value,
       TypeError,
       `Expected ${LABEL_PLACEHOLDER} to be a direct instance of "${expectedClass.name}", got "${valueDescriptor}".`
+    );
+  }
+
+  subclassOf(expectedClass, value) {
+    // If we were not provided a value, return a partially-applied version of
+    // assertIs that accepts a value.
+    if (arguments.length === 1) {
+      return partial(assertIs, ['subclassOf', expectedClass]);
+    }
+
+    if (is.subclassOf(value, expectedClass)) {
+      return new PassedAssertion(value);
+    }
+
+    return new FailedAssertion(
+      value,
+      TypeError,
+      `Expected ${LABEL_PLACEHOLDER} to be a subclass of "${expectedClass.name}".`
     );
   }
 
