@@ -10,7 +10,7 @@ import assertIs from './assert-is';
  *
  * @example
  *
- * import assertionContext from '...';
+ * import assertionContext from '@darkobits/assert-is/context';
  *
  * function add (a, b) {
  *   const assert = assertionContext('add');

@@ -52,9 +52,14 @@ function greet (name, age) {
   return `Hello! My name is ${name}, and I am ${age} years old.`;
 }
 
-greet('Bob', 36) //=> 'Hello! My name is Bob, and I am 36 years old.'
-greet('Alice', 'forty-three') //=> 'Hello! My name is Alice, and I am forty-three years old.'
-greet('Leeroy', NaN) //=> TypeError('Expected type of value to be any of "string" or "number", got "NaN".')
+greet('Bob', 36)
+//=> 'Hello! My name is Bob, and I am 36 years old.'
+
+greet('Alice', 'forty-three')
+//=> 'Hello! My name is Alice, and I am forty-three years old.'
+
+greet('Leeroy', NaN)
+//=> TypeError('Expected type of value to be any of "string" or "number", got "NaN".')
 ```
 
 ## Currying
@@ -90,7 +95,7 @@ assertIsIterable([1, 2, 3]);
 //=> [1, 2, 3]
 
 assertIsIterable(function () {});
-//=> TypeError('Expected type of value to be any of "array" or "map" or "weakMap" or "weakSet", got "function".')
+//=> TypeError('Expected type of value to be any of "Array", "Map", "WeakMap" or "WeakSet", got "function".')
 ```
 
 ## Additional Assertions
