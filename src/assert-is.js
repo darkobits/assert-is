@@ -54,6 +54,7 @@ function toTypeDescriptor(method) {
     map: 'Map',
     nan: 'NaN',
     nativePromise: 'native Promise',
+    // N.B. Outer double quotes are added by caller.
     nullOrUndefined: 'null" or "undefined',
     plainObject: 'plain object',
     regExp: 'RegExp',
@@ -230,6 +231,15 @@ class AssertionHandler {
     );
   }
 
+
+  /**
+   * Default handler for most "is" methods that don't require qualifiers or
+   * custom copy. Accepts a method and returns a function that accepts a value
+   * to be asserted.
+   *
+   * @param  {string} method - "is" method to use for assertion.
+   * @return {function}
+   */
   default(method) {
     return value => {
       if (is[method](value)) {
@@ -258,8 +268,13 @@ class AssertionHandler {
  * @return {any}
  */
 function parseResults(results, ctx = {}) {
+  // If provided, format 'context' into a prefix.
   const context = ctx.context ? `[${ctx.context}] ` : '';
+
+  // Use the provided label or 'value'.
   const label = ctx.label || 'value';
+
+  // If there is more than one result, we are doing a union type assertion.
   const isUnion = values(results).length > 1;
 
   // Handle union checks.
@@ -282,26 +297,26 @@ function parseResults(results, ctx = {}) {
     // list of each type in the union.
     throw new TypeError([
       context,
-      `Expected ${label} to be any of "${keys(results).map(toTypeDescriptor).join('" or "')}", `,
+      `Expected type of ${label} to be any of "${keys(results).map(toTypeDescriptor).join('" or "')}", `,
       `got "${toTypeDescriptor(is(value))}".`
     ].join(''));
   }
 
-  // Handle simple checks.
+  // Handle simple checks. Our PassedAssertion or FailedAssertion is the only
+  // value in the results object.
   const assertion = head(values(results));
 
-  // If the (only) assertion in the collection passed, return its value.
+  // If we have a PassedAssertion, return its 'value'.
   if (is.directInstanceOf(assertion, PassedAssertion)) {
     return assertion.value;
   }
 
-  // If the (only) assertion in the collection failed, throw an error.
+  // If we have a FailedAssertion, throw its error.
   if (is.directInstanceOf(assertion, FailedAssertion)) {
     throw new assertion.Error(`${context}${assertion.message.replace(LABEL_PLACEHOLDER, label)}`);
   }
 
-  // If the only member in the collection is a function returned by a handler
-  // doing partial application, return the function.
+  // If we have a function, assume the handler returned a partial application.
   if (is.function(assertion)) {
     return assertion;
   }
