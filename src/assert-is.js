@@ -1,5 +1,6 @@
-import {head, find, keys, intersection, is as isInstanceOf, path, partial, prop, values} from 'ramda';
+import {chain, head, find, keys, intersection, is as isInstanceOf, path, partial, prop, values} from 'ramda';
 import is from 'lib/is';
+import join from 'lib/join';
 
 
 /**
@@ -27,6 +28,15 @@ const LABEL_PLACEHOLDER = '%LABEL%';
 
 
 /**
+ * Curried join() that will join arrays into strings using "or".
+ *
+ * @param  {array} - Array of items to join.
+ * @return {string}
+ */
+const orJoin = join(', ', ' or ');
+
+
+/**
  * @private
  *
  * Converts the provided "is" method name to a string descriptor.
@@ -36,33 +46,35 @@ const LABEL_PLACEHOLDER = '%LABEL%';
  */
 function toTypeDescriptor(method) {
   const methodToDescriptor = {
+    array: 'Array',
     arrayBuffer: 'ArrayBuffer',
     arrayLike: 'array-like',
     asyncFunction: 'AsyncFunction',
     boundFunction: 'bound Function',
+    buffer: 'Buffer',
     dataView: 'DataView',
     date: 'Date',
     domElement: 'HTMLElement',
     emptyOrWhitespace: 'empty or whitespace',
+    error: 'Error',
     float32Array: 'Float32Array',
     float64Array: 'Float64Array',
     function: 'Function',
-    generatorFunction: 'generator function',
+    generatorFunction: 'generator Function',
     int16Array: 'Int16Array',
     int32Array: 'Int32Array',
     int8Array: 'Int8Array',
     map: 'Map',
     nan: 'NaN',
     nativePromise: 'native Promise',
-    // N.B. Outer double quotes are added by caller.
-    nullOrUndefined: 'null" or "undefined',
+    nullOrUndefined: ['null', 'undefined'],
     plainObject: 'plain object',
     regExp: 'RegExp',
     safeInteger: 'safe integer',
     set: 'Set',
     sharedArrayBuffer: 'SharedArrayBuffer',
     symbol: 'Symbol',
-    typedArray: 'typed array',
+    typedArray: 'typed Array',
     uint16Array: 'Uint16Array',
     uint32Array: 'Uint32Array',
     uint8Array: 'Uint8Array',
@@ -295,11 +307,11 @@ function parseResults(results, ctx = {}) {
     // Throw an error indicating that the value failed to satisfy any of the
     // types indicated. Here, we map over the keys of 'results' to construct a
     // list of each type in the union.
-    throw new TypeError([
-      context,
-      `Expected type of ${label} to be any of "${keys(results).map(toTypeDescriptor).join('" or "')}", `,
-      `got "${toTypeDescriptor(is(value))}".`
-    ].join(''));
+    const expectedTypes = orJoin(chain(toTypeDescriptor, keys(results)).map(JSON.stringify));
+
+    const receivedType = toTypeDescriptor(is(value));
+
+    throw new TypeError(`${context}Expected type of ${label} to be any of ${expectedTypes}. Got "${receivedType}".`);
   }
 
   // Handle simple checks. Our PassedAssertion or FailedAssertion is the only
