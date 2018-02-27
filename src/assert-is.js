@@ -309,48 +309,48 @@ function parseResults(results, ctx = {}) {
   // If there is more than one result, we are doing a union type assertion.
   const isUnion = values(results).length > 1;
 
-  // Handle union checks.
-  if (isUnion) {
-    // Find any assertions in the collection that passed.
-    const success = find(isInstanceOf(PassedAssertion), values(results));
+  // Find the first passing assertion in results.
+  const firstPassedAssertion = find(isInstanceOf(PassedAssertion), values(results));
 
-    // If the collection contains any passing assertions, then the value is
-    // considered valid.
-    if (success) {
-      return success.value;
+  // Find the first failing assertion in results.
+  const firstFailedAssertion = (find(isInstanceOf(FailedAssertion), values(results)));
+
+
+  // ----- Union Type Checks ---------------------------------------------------
+
+  if (isUnion) {
+    // Return the 'value' from the first passing assertion, if there was one.
+    if (firstPassedAssertion) {
+      return firstPassedAssertion.value;
     }
 
-    // Get the original value that was tested from the first failed assertion in
-    // the collection.
-    const value = prop('value', find(isInstanceOf(FailedAssertion), values(results)));
-
-    // Throw an error indicating that the value failed to satisfy any of the
-    // types indicated. Here, we map over the keys of 'results' to construct a
-    // list of each type in the union.
+    // Otherwise, generate type descriptors for all expected types and the
+    // received type.
     const expectedTypes = orJoin(chain(toTypeDescriptor, keys(results)).map(JSON.stringify));
-
-    const receivedType = toTypeDescriptor(is(value));
+    const receivedType = toTypeDescriptor(is(prop('value', firstFailedAssertion)));
 
     throw new TypeError(`${context}Expected type of ${label} to be either ${expectedTypes}. Got "${receivedType}".`);
   }
 
-  // Handle simple checks. Our PassedAssertion or FailedAssertion is the only
-  // value in the results object.
-  const assertion = head(values(results));
+
+  // ----- Simple Type Checks --------------------------------------------------
 
   // If we have a PassedAssertion, return its 'value'.
-  if (is.directInstanceOf(PassedAssertion, assertion)) {
-    return assertion.value;
+  if (firstPassedAssertion) {
+    return firstPassedAssertion.value;
   }
 
   // If we have a FailedAssertion, throw its error.
-  if (is.directInstanceOf(FailedAssertion, assertion)) {
-    throw new assertion.Error(`${context}${assertion.message.replace(LABEL_PLACEHOLDER, label)}`);
+  if (firstFailedAssertion) {
+    throw new firstFailedAssertion.Error(`${context}${firstFailedAssertion.message.replace(LABEL_PLACEHOLDER, label)}`);
   }
 
+  // Otherwise, get the first result.
+  const firstResult = head(values(results));
+
   // If we have a function, assume the handler returned a partial application.
-  if (is.function(assertion)) {
-    return assertion;
+  if (is.function(firstResult)) {
+    return firstResult;
   }
 }
 
@@ -368,6 +368,7 @@ function parseResults(results, ctx = {}) {
 function assertIs(methodOrMethods, ...args) {
   const context = this;
   const methods = [].concat(methodOrMethods);
+  const isUnion = methods.length > 1;
 
   // Ensure unsupported methods were not used.
   if (intersection(methods, ALWAYS_UNSUPPORTED).length > 0) {
@@ -376,10 +377,12 @@ function assertIs(methodOrMethods, ...args) {
 
   // If performing a union (any) type check, ensure methods that require
   // qualifiers were not used.
-  const usedUnsupportedUnionMethods = intersection(methods, UNSUPPORTED_WHEN_UNION);
+  if (isUnion) {
+    const usedUnsupportedUnionMethods = intersection(methods, UNSUPPORTED_WHEN_UNION);
 
-  if (methods.length > 1 && usedUnsupportedUnionMethods.length > 0) {
-    throw new Error(`[assertIs] Assertions using "${usedUnsupportedUnionMethods.join('", or "')}" are not supported for union types.`);
+    if (usedUnsupportedUnionMethods.length > 0) {
+      throw new Error(`[assertIs] Assertions using "${orJoin(usedUnsupportedUnionMethods)}" are not supported for union types.`);
+    }
   }
 
   // If we only received a method (or methods), and no qualifier or value,
@@ -389,9 +392,8 @@ function assertIs(methodOrMethods, ...args) {
   }
 
   // Otherwise, iterate over the array of methods and create an assertion
-  // handler for each. The result will be an object of:
-  //
-  // methodName: string -> assertion: PassedAssertion | FailedAssertion
+  // handler for each. Return an object that maps each method name to an
+  // instance of PassedAssertion or FailedAssertion.
   return parseResults(methods.reduce((acc, method) => {
     if (!is.function(is[method])) {
       throw new Error(`[assertIs] Assertion type "${method}" is invalid.`);
@@ -406,36 +408,8 @@ function assertIs(methodOrMethods, ...args) {
  * Returns a version of assertIs that will prefix errors thrown with the
  * provided string. Note: When using contexts, the tested value is not returned.
  *
- * Note: when using contexts, the tested value is not returned on successful
- * assertions.
- *
- * @example
- *
- * import assertionContext from '@darkobits/assert-is/context';
- *
- * function add (a, b) {
- *   const assert = assertionContext('add');
- *
- *   // Use assert just like assertIs:
- *   assert('number', a);
- *
- *   // This will throw errors like:
- *   // TypeError('[add] Expected value to be of type "number", got...');
- *
- *   // Or, use the 'arg/label' + 'is' methods to provide additional context
- *   // about an assertion.
- *   assert.arg('first argument', a).is('number');
- *
- *   // This will throw errors like:
- *   // TypeError('[add] Expected first argument to be of type "number", got...');
- *
- *   // You can also chain arg/is calls:
- *   assert.arg('first argument', a).is('number').arg('second argument', b).is('number');
- *
- *   return a + b;
- * }
- *
- * @param {string} context - Context (used to prefix error messages).
+ * @param  {string} context - Context (used to prefix error messages).
+ * @return {function}
  */
 assertIs.context = context => {
   assertIs('string', context);
@@ -464,14 +438,14 @@ assertIs.context = context => {
     };
   };
 
-  // Alias "arg" to "label".
+  // Alias "arg" -> "label".
   ContextualAssert.arg = ContextualAssert.label;
 
   return ContextualAssert;
 };
 
 
-// Alias 'ctx' to 'context';
+// Alias "ctx" -> "context";
 assertIs.ctx = assertIs.context;
 
 

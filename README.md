@@ -144,10 +144,14 @@ assertIs('subclassOf', Person, Animal);
 `assertIs` provides a fluent API for adding additional contextual information to errors:
 
 ```js
-import assertionContext from '@darkobits/assert-is/context';
+import assertIs from '@darkobits/assert-is';
+// or:
+import { context } from '@darkobits/assert-is';
 
 function add (a, b) {
-  const assert = assertionContext('add');
+  const assert = assertIs.context('add');
+  // or:
+  const assert = context('add);
 
   // Use assert() just like assertIs():
   assert('number', a);

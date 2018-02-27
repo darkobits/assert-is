@@ -22,8 +22,6 @@
     "test": "jest",
     "prebuild": "rimraf dist",
     "build": "babel src --out-dir=dist --source-maps",
-    "prepack": "pr:pre",
-    "postpack": "pr:post",
     "prebump": "run-p lint test build",
     "bump": "standard-version",
     "bump:beta": "npm run bump -- --prerelease=beta"
@@ -33,7 +31,6 @@
     "ramda": "^0.25.0"
   },
   "devDependencies": {
-    "@darkobits/publish-root": "^1.0.0",
     "babel-cli": "^6.26.0",
     "babel-jest": "^22.4.1",
     "babel-plugin-module-resolver": "^2.7.1",
