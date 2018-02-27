@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0-beta.2"></a>
+# [1.1.0-beta.2](https://github.com/darkobits/assert-is/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2018-02-27)
+
+
+### Bug Fixes
+
+* Add qualifier param to context's is() method. ([1133724](https://github.com/darkobits/assert-is/commit/1133724))
+
+
+### Features
+
+* Add custom join() function. ([ffbcd47](https://github.com/darkobits/assert-is/commit/ffbcd47))
+
+
+
 <a name="1.1.0-beta.1"></a>
 # [1.1.0-beta.1](https://github.com/darkobits/assert-is/compare/v1.1.0-beta.0...v1.1.0-beta.1) (2018-02-25)
 
