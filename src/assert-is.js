@@ -51,7 +51,7 @@ const orJoin = join(', ', ' or ');
 /**
  * @private
  *
- * Converts the provided "is" method name to a string descriptor.
+ * Maps the provided "is" method name to a descriptor.
  *
  * @param  {string} method
  * @return {string}
@@ -323,7 +323,7 @@ function parseResults(results, ctx = {}) {
 
     const receivedType = toTypeDescriptor(is(value));
 
-    throw new TypeError(`${context}Expected type of ${label} to be any of ${expectedTypes}. Got "${receivedType}".`);
+    throw new TypeError(`${context}Expected type of ${label} to be either ${expectedTypes}. Got "${receivedType}".`);
   }
 
   // Handle simple checks. Our PassedAssertion or FailedAssertion is the only

@@ -10,7 +10,7 @@ $ npm i @darkobits/assert-is
 ```
 
 # Use
-#### `default(method: string, valueOrQualifier: any, value: ?any) : any`
+#### `default(methodOrMethods: string | array, valueOrQualifier: any, value: ?any) : any`
 
 This package's default export is a function which accepts as its first parameter a valid method from **is** and then either a value **or** a qualifier and a value. Qualifiers are used on certain **is** methods such as [`inRange`](https://github.com/sindresorhus/is#inrangevalue-range). Unlike the method signatures of **is**, this library always expects the value to be the _last_ parameter. This is done to make currying easier (see below).
 
@@ -40,7 +40,7 @@ const add = (a, b) => assertIs('number', a) + assertIs('number', b);
 
 `assertIs` can be used to check if a value satisfies at least one of any **is** predicates.
 
-**Note:** Predicates which require qualifiers (like `inRange` and `directInstanceOf`) are not supported with when performing union type assertions.
+**Note:** Predicates which require qualifiers (like `inRange` and `directInstanceOf`) are not supported when performing union type assertions.
 
 ```js
 import assertIs from '@darkobits/assert-is';
@@ -59,7 +59,7 @@ greet('Alice', 'forty-three')
 //=> 'Hello! My name is Alice, and I am forty-three years old.'
 
 greet('Leeroy', NaN)
-//=> TypeError('Expected type of value to be any of "string" or "number", got "NaN".')
+//=> TypeError('Expected type of value to be either "string" or "number". Got "NaN".')
 ```
 
 ## Currying
@@ -95,7 +95,7 @@ assertIsIterable([1, 2, 3]);
 //=> [1, 2, 3]
 
 assertIsIterable(function () {});
-//=> TypeError('Expected type of value to be any of "Array", "Map", "WeakMap" or "WeakSet", got "function".')
+//=> TypeError('Expected type of value to be either "Array", "Map", "WeakMap" or "WeakSet". Got "function".')
 ```
 
 ## Additional Assertions

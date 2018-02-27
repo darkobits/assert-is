@@ -26,7 +26,7 @@ describe('contexts', () => {
 
   it('should throw on the first invalid parameter', () => {
     expect(() => greet('Hello', 13, null, false))
-      .toThrow('[Person::greet] Expected type of title to be any of "string", "null", or "undefined". Got "number".');
+      .toThrow('[Person::greet] Expected type of title to be either "string", "null", or "undefined". Got "number".');
   });
 
   it('should support union types', () => {
