@@ -1,11 +1,40 @@
 import _is from '@sindresorhus/is';
-import isInstanceOf from 'lib/is-instance-of';
-import isSubclassOf from 'lib/is-subclass-of';
+import {is as ramdaIs} from 'ramda';
 
-export default function is(...args) {
+
+function is(...args) {
   return _is(...args);
 }
 
+
 Object.setPrototypeOf(is, _is);
-Object.defineProperty(is, 'subclassOf', {value: isSubclassOf});
-Object.defineProperty(is, 'instanceOf', {value: isInstanceOf});
+
+
+Object.defineProperties(is, {
+  /**
+   * Provided two classes (or constructor functions), returns true if the second
+   * is a subclass (re: extends) the first.
+   *
+   * @param  {function|class} parent
+   * @param  {function|class} child
+   * @return {boolean}
+   */
+  subclassOf: {
+    value: (child, parent) => child.prototype instanceof parent
+  },
+
+  /**
+   * Returns true if the provided instance is an instance of the provided class or
+   * constructor function.
+   *
+   * @param  {function|class} Ctor
+   * @param  {any} instance
+   * @return {boolean}
+   */
+  instanceOf: {
+    value: ramdaIs
+  }
+});
+
+
+export default is;
