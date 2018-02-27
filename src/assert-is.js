@@ -177,7 +177,7 @@ class AssertionHandler {
       return partial(assertIs, ['directInstanceOf', expectedClass]);
     }
 
-    if (is.directInstanceOf(value, expectedClass)) {
+    if (is.directInstanceOf(expectedClass, value)) {
       return new PassedAssertion(value);
     }
 
@@ -199,7 +199,7 @@ class AssertionHandler {
       return partial(assertIs, ['subclassOf', expectedClass]);
     }
 
-    if (is.subclassOf(value, expectedClass)) {
+    if (is.subclassOf(expectedClass, value)) {
       return new PassedAssertion(value);
     }
 
@@ -217,7 +217,7 @@ class AssertionHandler {
       return partial(assertIs, ['inRange', rangeOrUpperBound]);
     }
 
-    if (is.inRange(value, rangeOrUpperBound)) {
+    if (is.inRange(rangeOrUpperBound, value)) {
       return new PassedAssertion(value);
     }
 
@@ -339,12 +339,12 @@ function parseResults(results, ctx = {}) {
   const assertion = head(values(results));
 
   // If we have a PassedAssertion, return its 'value'.
-  if (is.directInstanceOf(assertion, PassedAssertion)) {
+  if (is.directInstanceOf(PassedAssertion, assertion)) {
     return assertion.value;
   }
 
   // If we have a FailedAssertion, throw its error.
-  if (is.directInstanceOf(assertion, FailedAssertion)) {
+  if (is.directInstanceOf(FailedAssertion, assertion)) {
     throw new assertion.Error(`${context}${assertion.message.replace(LABEL_PLACEHOLDER, label)}`);
   }
 
