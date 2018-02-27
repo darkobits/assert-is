@@ -29,7 +29,7 @@ import assertIs from './assert-is';
  *   // TypeError('[add] Expected first argument to be of type "number", got...');
  *
  *   // You can also chain arg/is calls:
- *   assert.arg('first argument', a).is('number').arg('second argument', b).is('number);
+ *   assert.arg('first argument', a).is('number').arg('second argument', b).is('number');
  *
  *   return a + b;
  * }

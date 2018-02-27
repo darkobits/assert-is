@@ -16,6 +16,8 @@ import join from 'lib/join';
 
 
 /**
+ * @private
+ *
  * List of "is" methods we never support.
  *
  * @type {array}
@@ -24,6 +26,8 @@ const ALWAYS_UNSUPPORTED = ['all', 'any'];
 
 
 /**
+ * @private
+ *
  * List of "is" methods we don't support when performing union type checks.
  *
  * @type {array}
@@ -32,6 +36,8 @@ const UNSUPPORTED_WHEN_UNION = ['inRange', 'directInstanceOf'];
 
 
 /**
+ * @private
+ *
  * Placeholder for labels used in error messages.
  *
  * @type {string}
@@ -40,6 +46,8 @@ const LABEL_PLACEHOLDER = '%LABEL%';
 
 
 /**
+ * @private
+ *
  * Curried join() that will join arrays into strings using "or".
  *
  * @param  {array} - Array of items to join.
@@ -54,7 +62,7 @@ const orJoin = join(', ', ' or ');
  * Maps the provided "is" method name to a descriptor.
  *
  * @param  {string} method
- * @return {string}
+ * @return {string|array}
  */
 function toTypeDescriptor(method) {
   const methodToDescriptor = {
