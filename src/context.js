@@ -51,8 +51,13 @@ export default function assertionContext(context) {
    */
   ContextualAssert.label = (label, ...args) => {
     return {
-      is(methodOrMethods) {
-        Reflect.apply(assertIs, {context, label}, [methodOrMethods, ...args]);
+      is(methodOrMethods, qualifier) {
+        if (qualifier) {
+          Reflect.apply(assertIs, {context, label}, [methodOrMethods, qualifier, ...args]);
+        } else {
+          Reflect.apply(assertIs, {context, label}, [methodOrMethods, ...args]);
+        }
+
         return ContextualAssert;
       }
     };
