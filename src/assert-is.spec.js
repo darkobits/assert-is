@@ -79,28 +79,28 @@ describe('basic functionality', () => {
 describe('union types', () => {
   it('should throw an error if the provided value does not satisfy the predicate', () => {
     expect(() => assertIs(['truthy', 'string'], null))
-      .toThrow(/Expected type of value to be any of "truthy" or "string". Got "null"./);
+      .toThrow(/Expected type of value to be either "truthy" or "string". Got "null"./);
 
     expect(() => assertIs(['symbol', 'function'])('foo'))
-      .toThrow(/Expected type of value to be any of "Symbol" or "Function". Got "string"./);
+      .toThrow(/Expected type of value to be either "Symbol" or "Function". Got "string"./);
 
     expect(() => assertIs(['regExp', 'date'], []))
-      .toThrow(/Expected type of value to be any of "RegExp" or "Date". Got "Array"./);
+      .toThrow(/Expected type of value to be either "RegExp" or "Date". Got "Array"./);
 
     expect(() => assertIs(['number', 'nan'], 'three'))
-      .toThrow(/Expected type of value to be any of "number" or "NaN". Got "string"./);
+      .toThrow(/Expected type of value to be either "number" or "NaN". Got "string"./);
 
     expect(() => assertIs(['integer', 'falsy'])(3.14))
-      .toThrow(/Expected type of value to be any of "integer" or "falsy". Got "number"./);
+      .toThrow(/Expected type of value to be either "integer" or "falsy". Got "number"./);
 
     expect(() => assertIs(['null', 'undefined'], false))
-      .toThrow(/Expected type of value to be any of "null" or "undefined". Got "boolean"./);
+      .toThrow(/Expected type of value to be either "null" or "undefined". Got "boolean"./);
 
     expect(() => assertIs(['plainObject', 'array'], new Set()))
-      .toThrow(/Expected type of value to be any of "plain object" or "Array". Got "Set"./);
+      .toThrow(/Expected type of value to be either "plain object" or "Array". Got "Set"./);
 
     expect(() => assertIs(['truthy', 'function'], undefined))
-      .toThrow(/Expected type of value to be any of "truthy" or "Function". Got "undefined"./);
+      .toThrow(/Expected type of value to be either "truthy" or "Function". Got "undefined"./);
 
     expect(() => assertIs(['directInstanceOf', 'plainObject'], Error, {}))
       .toThrow(/Assertions using "directInstanceOf" are not supported./);
