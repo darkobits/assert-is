@@ -1,4 +1,16 @@
-import {chain, head, find, keys, intersection, is as isInstanceOf, path, partial, prop, values} from 'ramda';
+import {
+  chain,
+  head,
+  find,
+  keys,
+  intersection,
+  is as isInstanceOf,
+  path,
+  partial,
+  prop,
+  values
+} from 'ramda';
+
 import is from 'lib/is';
 import join from 'lib/join';
 
@@ -139,7 +151,7 @@ class AssertionHandler {
       return partial(assertIs, ['instanceOf', expectedClass]);
     }
 
-    if (is.instanceOf(value, expectedClass)) {
+    if (is.instanceOf(expectedClass, value)) {
       return new PassedAssertion(value);
     }
 
