@@ -15,14 +15,8 @@ import toTypeDescriptor from 'lib/to-type-descriptor';
  * @return {function} - Assertion handler.
  */
 export default function getAssertionHandler(method, assertIs) {
-  /**
-   * Default handler for most "is" methods that don't require qualifiers or
-   * custom copy. Accepts a method and returns a function that accepts a value
-   * to be asserted.
-   *
-   * @param  {string} method - "is" method to use for assertion.
-   * @return {function}
-   */
+  // Default handler for most "is" methods that don't require qualifiers or
+  // custom copy.
   function defaultHandler(value) {
     if (is[method](value)) {
       return value;
@@ -98,7 +92,7 @@ export default function getAssertionHandler(method, assertIs) {
       // Determine which error copy to use based on which invocation was used.
       let message;
 
-      if (Array.isArray(rangeOrUpperBound)) {
+      if (is.array(rangeOrUpperBound)) {
         const [low, high] = rangeOrUpperBound;
         message = `Expected ${LABEL_PLACEHOLDER} ${value} to be between ${low} and ${high}.`;
       } else {

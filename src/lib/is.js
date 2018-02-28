@@ -45,7 +45,7 @@ Object.defineProperties(is, {
 
   // Reverse the parameter order of 'inRange'.
   inRange: {
-    value: flip(_is.inRange)
+    value: flip(_is.inRange).bind(_is)
   }
 });
 

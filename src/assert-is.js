@@ -82,14 +82,16 @@ function assertIs(methodOrMethods, ...args) {
   }
 
   if (isUnion) {
-    // Otherwise, generate type descriptors for all expected types and the
-    // received type.
+    // If doing a union type check, generate descriptors for expected and
+    // received types.
     const expectedTypes = orJoin(chain(toTypeDescriptor, methods).map(JSON.stringify));
     const receivedType = toTypeDescriptor(is(prop('value', error)));
 
-    // Union assertions do not use the copy returned by the handler.
     throw new TypeError(`${context}Expected type of ${label} to be either ${expectedTypes}. Got "${receivedType}".`);
   } else {
+    // If doing a simple assertion, throw the same error type provided by the
+    // handler, adding 'context' and replacing its label placeholder with the
+    // correct value.
     throw new error.constructor(`${context}${error.message.replace(LABEL_PLACEHOLDER, label)}`);
   }
 }
