@@ -59,6 +59,8 @@ describe('basic functionality', () => {
 
     expect(assertIs('directInstanceOf', Map)(new Map())).toBeInstanceOf(Map);
 
+    expect(assertIs('inRange', [1, Infinity])(42)).toBe(42);
+
     expect(assertIs('inRange', 10, 5)).toBe(5);
 
     expect(assertIs('inRange', [10, 20], 15)).toBe(15);
@@ -173,9 +175,17 @@ describe('contexts', () => {
   it('should throw on the first invalid parameter', () => {
     expect(() => greet('Hello', 13, null, false))
       .toThrow('[Person::greet] Expected type of title to be either "string", "null", or "undefined". Got "number".');
+
+    expect(() => add('one', 2))
+      .toThrow('[add] Expected value to be of type "number", got "string".');
   });
 
   it('should support union types', () => {
     expect(greet('Hello', null, 'Bob', 'Smith')).toBe('Hello, Bob Smith!');
+  });
+
+  it('should support qualifiers', () => {
+    expect(() => assertIs.context('qualifier').arg('number', 150).is('inRange', [1, 100]))
+      .toThrow('[qualifier] Expected number 150 to be between 1 and 100.');
   });
 });
