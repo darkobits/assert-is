@@ -1,5 +1,5 @@
 <a href="#top" id="top">
-  <img src="https://user-images.githubusercontent.com/441546/36770873-dd84aa14-1c01-11e8-90a8-3da059876af4.png">
+  <img src="https://user-images.githubusercontent.com/441546/36771960-28d68aa4-1c08-11e8-8bdf-9c446c7c2597.png">
 </a>
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/assert-is"><img src="https://img.shields.io/npm/v/@darkobits/assert-is.svg?style=flat-square"></a>
